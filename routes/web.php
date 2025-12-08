@@ -21,7 +21,10 @@ use App\Http\Controllers\PaymentController;
 
 Route::get('/payment/{heritage_id}', [PaymentController::class, 'showForm'])->name('payment.form');
 Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
-Route::get('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
+Route::post('/payment/callback', [PaymentController::class, 'callback'])
+    ->name('payment.callback.fedapay');
+
+
 
 
 
