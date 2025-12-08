@@ -43,15 +43,6 @@ use App\Orchid\Screens\Commentaire\CommentaireEditScreen;
 use App\Orchid\Screens\Commentaire\CommentaireScreen;
 use App\Orchid\Screens\Commentaire\CommentaireShowScreen;
 
-use App\Orchid\Screens\Typecontenu\TypecontenuIndexScreen;
-use App\Orchid\Screens\Typecontenu\TypecontenuEditScreen;
-
-use App\Orchid\Screens\Typecontenu\TypecontenuShowScreen;
-
-use App\Orchid\Screens\Typemedia\TypemediaIndexScreen;
-use App\Orchid\Screens\Typemedia\TypemediaScreen;
-use App\Orchid\Screens\Typemedia\TypemediaEditScreen;
-use App\Orchid\Screens\Typemedia\TypemediaShowScreen;
 
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
