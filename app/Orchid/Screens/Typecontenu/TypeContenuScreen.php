@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Orchid\Screens\TypeContenu;
+namespace App\Orchid\Screens\Typecontenu;
 
 use App\Models\TypeContenu;
 use Orchid\Screen\Screen;
@@ -10,7 +10,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Support\Facades\Toast;
 use Orchid\Support\Facades\Layout;
 
-class TypeContenuScreen extends Screen
+class TypecontenuScreen extends Screen
 {
     public $name = 'Types de contenu';
     public $description = 'Gestion des types de contenu';
