@@ -45,7 +45,7 @@ use App\Orchid\Screens\Commentaire\CommentaireShowScreen;
 
 use App\Orchid\Screens\Typecontenu\TypecontenuIndexScreen;
 use App\Orchid\Screens\Typecontenu\TypecontenuEditScreen;
-use App\Orchid\Screens\Typecontenu\TypecontenuScreen;
+
 use App\Orchid\Screens\Typecontenu\TypecontenuShowScreen;
 
 use App\Orchid\Screens\Typemedia\TypemediaIndexScreen;
@@ -83,8 +83,7 @@ Route::screen('langues/create', LangueEditScreen::class)
     ->name('platform.contenu.create');
 
     
-     Route::screen('typecontenus/create', TypecontenuEditScreen::class)
-    ->name('platform.typecontenu.create');
+  
 
      Route::screen('typemedias/create', TypemediaEditScreen::class)
     ->name('platform.typemedia.create');
@@ -192,23 +191,7 @@ Route::screen('commentaires/{commentaire}/show', CommentaireShowScreen::class)
         ->push('Show', route('platform.commentaire.show', $commentaire)));
 
 // TypeContenu
-Route::screen('typecontenus', TypecontenuScreen::class)
-    ->name('platform.typecontenus')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('platform.index')
-        ->push(__('Type Contenus'), route('platform.typecontenus')));
 
-Route::screen('typecontenus/{typecontenu}/edit', TypecontenuEditScreen::class)
-    ->name('platform.typecontenu.edit')
-    ->breadcrumbs(fn (Trail $trail, $typecontenu) => $trail
-        ->parent('platform.typecontenus')
-        ->push('Edit', route('platform.typecontenu.edit', $typecontenu)));
-
-Route::screen('typecontenus/{typecontenu}/show', TypecontenuShowScreen::class)
-    ->name('platform.typecontenu.show')
-    ->breadcrumbs(fn (Trail $trail, $typecontenu) => $trail
-        ->parent('platform.typecontenus')
-        ->push('Show', route('platform.typecontenu.show', $typecontenu)));
 
 // TypeMedias
 Route::screen('typemedias', TypemediaScreen::class)

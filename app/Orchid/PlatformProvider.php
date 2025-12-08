@@ -52,9 +52,6 @@ class PlatformProvider extends OrchidServiceProvider
 
           
 
-            Menu::make('Types Contenu')
-                ->icon('bs.columns-gap')
-                ->route('platform.typecontenus'),
 
             Menu::make('Types Médias')
                 ->icon('bs.collection')
