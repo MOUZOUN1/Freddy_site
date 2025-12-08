@@ -53,9 +53,6 @@ class PlatformProvider extends OrchidServiceProvider
           
 
 
-            Menu::make('Types Médias')
-                ->icon('bs.collection')
-                ->route('platform.typemedias'),
 
             Menu::make('Utilisateurs')
                 ->icon('bs.people')

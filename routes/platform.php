@@ -85,8 +85,6 @@ Route::screen('langues/create', LangueEditScreen::class)
     
   
 
-     Route::screen('typemedias/create', TypemediaEditScreen::class)
-    ->name('platform.typemedia.create');
 
        Route::screen('medias/create', MediaEditScreen::class)
     ->name('platform.media.create');
@@ -194,23 +192,7 @@ Route::screen('commentaires/{commentaire}/show', CommentaireShowScreen::class)
 
 
 // TypeMedias
-Route::screen('typemedias', TypemediaScreen::class)
-    ->name('platform.typemedias')
-    ->breadcrumbs(fn (Trail $trail) => $trail
-        ->parent('platform.index')
-        ->push(__('Type Medias'), route('platform.typemedias')));
 
-Route::screen('typemedias/{typemedia}/edit', TypemediaEditScreen::class)
-    ->name('platform.typemedia.edit')
-    ->breadcrumbs(fn (Trail $trail, $typemedia) => $trail
-        ->parent('platform.typemedias')
-        ->push('Edit', route('platform.typemedia.edit', $typemedia)));
-
-Route::screen('typemedias/{typemedia}/show', TypemediaShowScreen::class)
-    ->name('platform.typemedia.show')
-    ->breadcrumbs(fn (Trail $trail, $typemedia) => $trail
-        ->parent('platform.typemedias')
-        ->push('Show', route('platform.typemedias.show', $typemedia)));
 
 // Users
 Route::screen('users', UserListScreen::class)
