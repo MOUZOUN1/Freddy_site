@@ -56,9 +56,7 @@ Route::middleware('auth')->group(function () {
 // === TABLEAU DE BORD (après login, pas besoin twofactor encore) ===
 Route::middleware('auth')->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('frontend.home');
-    })->name('dashboard');
+   
 
     // Profil utilisateur
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
