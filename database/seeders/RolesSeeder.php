@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Role;
 
 class RolesSeeder extends Seeder
 {
@@ -13,15 +12,40 @@ class RolesSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        DB::table('roles')->insert([
-    ['slug' => 'administrateur', 'name' => 'Administrateur', 'permissions' => json_encode(['*'])],
+        // Administrateur
+        Role::updateOrCreate(
+            ['slug' => 'administrateur'],
+            ['name' => 'Administrateur', 'permissions' => json_encode(['*'])]
+        );
 
-    ['slug' => 'manager', 'name' => 'Manager', 'permissions' => json_encode([])],
-    ['slug' => 'moderateur', 'name' => 'Modérateur', 'permissions' => json_encode(['platform.posts.create', 'platform.posts.edit'])],
-    ['slug' => 'auteur', 'name' => 'Auteur', 'permissions' => json_encode(['platform.posts.create', 'platform.posts.edit'])],
-    ['slug' => 'lecteur', 'name' => 'Lecteur', 'permissions' => json_encode([])],
-]);
+        // Manager
+        Role::updateOrCreate(
+            ['slug' => 'manager'],
+            ['name' => 'Manager', 'permissions' => json_encode([])]
+        );
 
+        // Modérateur
+        Role::updateOrCreate(
+            ['slug' => 'moderateur'],
+            ['name' => 'Modérateur', 'permissions' => json_encode([
+                'platform.posts.create',
+                'platform.posts.edit'
+            ])]
+        );
+
+        // Auteur
+        Role::updateOrCreate(
+            ['slug' => 'auteur'],
+            ['name' => 'Auteur', 'permissions' => json_encode([
+                'platform.posts.create',
+                'platform.posts.edit'
+            ])]
+        );
+
+        // Lecteur
+        Role::updateOrCreate(
+            ['slug' => 'lecteur'],
+            ['name' => 'Lecteur', 'permissions' => json_encode([])]
+        );
     }
 }

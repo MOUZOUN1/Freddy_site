@@ -19,13 +19,16 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             RolesSeeder::class,
             Roles_UserSeeder::class,
+              LanguesSeeder::class,
+              RegionsSeeder::class,
+               TypeContenusSeeder::class,
+            TypeMediaSeeder::class,
             ContenusSeeder::class,
             CommentairesSeeder::class,
             MediaSeeder::class,
-            LanguesSeeder::class,
-            RegionsSeeder::class,
-            TypeContenusSeeder::class,
-            TypeMediaSeeder::class,
+          
+            
+           
             ParlersSeeder::class,
         ]);
     }

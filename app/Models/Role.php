@@ -1,41 +1,10 @@
 <?php
 
-namespace Orchid\Platform\Models;
+namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Orchid\Platform\Concerns\Access;
+use Orchid\Platform\Models\Role as OrchidRole;
 
-class Role extends Model
+class Role extends OrchidRole
 {
-    use HasFactory, Access;
-
-    /**
-     * The table associated with the model.
-     */
-    protected $table = 'roles';
-
-    /**
-     * The attributes that are mass assignable.
-     */
-    protected $fillable = [
-        'slug',
-        'name',
-        'permissions',
-    ];
-
-    /**
-     * Cast attributes.
-     */
-    protected $casts = [
-        'permissions' => 'array',
-    ];
-
-    /**
-     * Get all users for this role.
-     */
-    public function users()
-    {
-        return $this->belongsToMany(\App\Models\User::class, 'role_users', 'role_id', 'user_id');
-    }
+    // Tu peux laisser vide, Orchid gère déjà tout pour ce modèle
 }
