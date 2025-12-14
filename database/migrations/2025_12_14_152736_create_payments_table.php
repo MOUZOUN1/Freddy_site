@@ -6,24 +6,29 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('subscription_id')->nullable()->constrained()->onDelete('set null');
-            $table->string('transaction_id')->unique();
+            $table->string('type'); // mensuel, annuel
             $table->decimal('amount', 10, 2);
-            $table->string('currency')->default('XOF');
-            $table->string('payment_method'); // mobile_money, card
-            $table->enum('status', ['pending', 'completed', 'failed', 'refunded'])->default('pending');
-            $table->text('fedapay_response')->nullable();
+            $table->timestamp('starts_at');
+            $table->timestamp('ends_at');
+            $table->enum('status', ['active', 'expired', 'cancelled'])->default('active');
+            $table->string('payment_reference')->nullable();
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('subscriptions');
     }
 };
