@@ -15,6 +15,18 @@ class CheckSubscription
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Vérifier si l'utilisateur est connecté
+        if (!auth()->check()) {
+            return redirect()->route('login')
+                           ->with('error', 'Veuillez vous connecter pour accéder à ce contenu.');
+        }
+
+        // Vérifier si l'utilisateur a un abonnement actif
+        if (!auth()->user()->hasActiveSubscription()) {
+            return redirect()->route('subscription.plans')
+                           ->with('warning', 'Vous devez souscrire à un abonnement pour accéder à ce contenu premium.');
+        }
+
         return $next($request);
     }
 }

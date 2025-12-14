@@ -3,63 +3,68 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\TypeContenu;
 use Illuminate\Http\Request;
 
 class TypeContenuController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $query = TypeContenu::withCount('contenus');
+
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            $query->where('libelle', 'like', "%{$search}%");
+        }
+
+        $typecontenus = $query->latest()->paginate(10);
+        return view('backend.typecontenus.index', compact('typecontenus'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('backend.typecontenus.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'libelle' => 'required|string|max:255|unique:typecontenus',
+        ]);
+
+        TypeContenu::create($validated);
+
+        return redirect()->route('admin.typecontenus.index')
+                        ->with('success', 'Type de contenu créé avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(TypeContenu $typecontenu)
     {
-        //
+        $typecontenu->load('contenus');
+        return view('backend.typecontenus.show', compact('typecontenu'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(TypeContenu $typecontenu)
     {
-        //
+        return view('backend.typecontenus.edit', compact('typecontenu'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, TypeContenu $typecontenu)
     {
-        //
+        $validated = $request->validate([
+            'libelle' => 'required|string|max:255|unique:typecontenus,libelle,' . $typecontenu->id,
+        ]);
+
+        $typecontenu->update($validated);
+
+        return redirect()->route('admin.typecontenus.index')
+                        ->with('success', 'Type de contenu mis à jour avec succès.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(TypeContenu $typecontenu)
     {
-        //
+        $typecontenu->delete();
+        return redirect()->route('admin.typecontenus.index')
+                        ->with('success', 'Type de contenu supprimé avec succès.');
     }
 }
