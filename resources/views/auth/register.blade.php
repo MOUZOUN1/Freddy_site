@@ -1,88 +1,119 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+@extends('layouts.app')
 
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+@section('title', 'Inscription - Culture Bénin')
 
-<div class="bg-white shadow-xl rounded-lg p-10 w-full max-w-md">
-
-    <!-- Logo -->
-    <div class="flex justify-center mb-6">
-        <img src="{{ asset('images/logo_beninrevele.jpg') }}" class="h-20" alt="Logo">
-    </div>
-
-    <h2 class="text-2xl font-bold text-center text-[#014E82] mb-6">
-        Créer un compte
-    </h2>
-
-    @if (session('status'))
-        <div class="bg-green-100 text-green-800 p-2 rounded mb-4 text-center">
-            {{ session('status') }}
-        </div>
-    @endif
-
-    @if ($errors->any())
-        <div class="bg-red-100 text-red-800 p-2 rounded mb-4 text-center">
-            {{ $errors->first() }}
-        </div>
-    @endif
-
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
-
-        <!-- Nom -->
-        <div class="mb-4">
-            <label class="block text-gray-700 font-medium mb-2">Nom</label>
-            <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus
-                   class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-[#014E82] focus:outline-none"
-                   placeholder="Votre nom">
+@section('content')
+<div class="max-w-md mx-auto px-4">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <div class="text-center mb-8">
+            <i class="fas fa-user-plus text-6xl text-green-600 mb-4"></i>
+            <h2 class="text-3xl font-bold text-gray-800">Inscription</h2>
+            <p class="text-gray-600 mt-2">Créez votre compte gratuitement</p>
         </div>
 
-        <!-- Email -->
-        <div class="mb-4">
-            <label class="block text-gray-700 font-medium mb-2">Email</label>
-            <input type="email" id="email" name="email" value="{{ old('email') }}" required
-                   class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-[#014E82] focus:outline-none"
-                   placeholder="votre.email@example.com">
-        </div>
+        <form method="POST" action="{{ route('register') }}">
+            @csrf
 
-        <!-- Mot de passe -->
-        <div class="mb-4">
-            <label class="block text-gray-700 font-medium mb-2">Mot de passe</label>
-            <input type="password" id="password" name="password" required
-                   class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-[#014E82] focus:outline-none"
-                   placeholder="••••••••">
-        </div>
+            <!-- Name -->
+            <div class="mb-6">
+                <label for="name" class="block text-gray-700 font-medium mb-2">
+                    <i class="fas fa-user mr-2"></i>Nom complet
+                </label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    value="{{ old('name') }}"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 @error('name') border-red-500 @enderror"
+                    placeholder="Jean Dupont"
+                    required
+                >
+                @error('name')
+                    <p class="text-red-500 text-sm mt-1">
+                        <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+                    </p>
+                @enderror
+            </div>
 
-        <!-- Confirmation -->
-        <div class="mb-6">
-            <label class="block text-gray-700 font-medium mb-2">Confirmer le mot de passe</label>
-            <input type="password" id="password_confirmation" name="password_confirmation" required
-                   class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-[#014E82] focus:outline-none"
-                   placeholder="••••••••">
-        </div>
+            <!-- Email -->
+            <div class="mb-6">
+                <label for="email" class="block text-gray-700 font-medium mb-2">
+                    <i class="fas fa-envelope mr-2"></i>Email
+                </label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    value="{{ old('email') }}"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 @error('email') border-red-500 @enderror"
+                    placeholder="votre@email.com"
+                    required
+                >
+                @error('email')
+                    <p class="text-red-500 text-sm mt-1">
+                        <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+                    </p>
+                @enderror
+            </div>
 
-        <!-- Boutons -->
-        <div class="flex items-center justify-between">
-            <a href="{{ route('login') }}"
-               class="text-sm text-gray-600 hover:text-[#014E82] underline">
-                Déjà inscrit ?
-            </a>
+            <!-- Password -->
+            <div class="mb-6">
+                <label for="password" class="block text-gray-700 font-medium mb-2">
+                    <i class="fas fa-lock mr-2"></i>Mot de passe
+                </label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 @error('password') border-red-500 @enderror"
+                    placeholder="••••••••"
+                    required
+                >
+                @error('password')
+                    <p class="text-red-500 text-sm mt-1">
+                        <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+                    </p>
+                @enderror
+            </div>
 
-            <button type="submit"
-                    class="py-2 px-6 bg-[#014E82] hover:bg-[#023d66] text-white rounded-lg font-semibold transition">
-                S'inscrire
+            <!-- Password Confirmation -->
+            <div class="mb-6">
+                <label for="password_confirmation" class="block text-gray-700 font-medium mb-2">
+                    <i class="fas fa-lock mr-2"></i>Confirmer le mot de passe
+                </label>
+                <input 
+                    type="password" 
+                    id="password_confirmation" 
+                    name="password_confirmation" 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    placeholder="••••••••"
+                    required
+                >
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+                type="submit" 
+                class="w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition duration-300"
+            >
+                <i class="fas fa-user-plus mr-2"></i>S'inscrire
             </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="my-6 text-center text-gray-500">
+            <span>ou</span>
         </div>
 
-    </form>
-
+        <!-- Login Link -->
+        <div class="text-center">
+            <p class="text-gray-600">
+                Vous avez déjà un compte ?
+                <a href="{{ route('login') }}" class="text-green-600 font-medium hover:text-green-700">
+                    Connectez-vous
+                </a>
+            </p>
+        </div>
+    </div>
 </div>
-
-</body>
-</html>
+@endsection

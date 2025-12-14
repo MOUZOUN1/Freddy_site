@@ -1,101 +1,84 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\TwoFactorController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\ContentController;
+use App\Http\Controllers\Auth\CustomAuthController;
+use App\Http\Controllers\Auth\TwoFactorController;
+use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Backend\ContenuController;
+use App\Http\Controllers\Backend\LangueController;
+use App\Http\Controllers\Backend\MediaController;
+use App\Http\Controllers\Backend\RegionController;
+use App\Http\Controllers\Backend\CommentaireController;
+use App\Http\Controllers\Backend\RoleController;
+use App\Http\Controllers\Backend\TypeMediaController;
+use App\Http\Controllers\Backend\TypeContenuController;
+use App\Http\Controllers\SubscriptionController;
 
-// CONTROLEURS BACKEND
-use App\Http\Controllers\LanguesController;
-use App\Http\Controllers\RegionController;
-use App\Http\Controllers\ContenusController;
-use App\Http\Controllers\MediasController;
-use App\Http\Controllers\CommentairesController;
-use App\Http\Controllers\TypeContenusController;
-use App\Http\Controllers\TypemediasController;
-use App\Http\Controllers\ParlerController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\SearchController;
-use App\Http\Controllers\PaymentController;
+// Page de bienvenue
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
 
+// Frontend public
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/content/{id}', [ContentController::class, 'show'])->name('content.show');
+Route::post('/content/{id}/comment', [ContentController::class, 'storeComment'])->name('content.comment')->middleware('auth');
 
-Route::get('/payment/{heritage_id}', [PaymentController::class, 'showForm'])->name('payment.form');
-Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
-Route::post('/payment/callback', [PaymentController::class, 'callback'])
-    ->name('payment.callback.fedapay');
-
-
-
-
-
-Route::get('/recherche', [SearchController::class, 'search'])->name('search');
-
-
-
-// === PAGE D’ACCUEIL FRONTEND ===
- Route::get('/', function () {
-        return view('frontend.home');
-    })->name('dashboard');
-
-
-
-// == AUTHENTIFICATION ==
-Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-
-
-// === ROUTES 2FA ===
-Route::middleware('auth')->group(function () {
-
-    Route::get('/two-factor', [TwoFactorController::class, 'index'])
-        ->name('verify.code');
-
-    Route::post('/two-factor', [TwoFactorController::class, 'store'])
-        ->name('verify.code.store');
+// Authentication Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [CustomAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [CustomAuthController::class, 'login']);
+    Route::get('/register', [CustomAuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [CustomAuthController::class, 'register']);
 });
 
+// Email Verification
+Route::get('/verify-email/{token}', [EmailVerificationController::class, 'verify'])->name('email.verify');
 
-// === TABLEAU DE BORD (après login, pas besoin twofactor encore) ===
+// Two Factor Authentication
 Route::middleware('auth')->group(function () {
-
-   
-
-    // Profil utilisateur
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/two-factor', [TwoFactorController::class, 'show'])->name('two-factor.verify');
+    Route::post('/two-factor', [TwoFactorController::class, 'verify']);
+    Route::post('/two-factor/resend', [TwoFactorController::class, 'resend'])->name('two-factor.resend');
 });
 
+// Protected Frontend Routes (Authenticated users)
+Route::middleware(['auth', 'two-factor'])->group(function () {
+    Route::get('/profile', [CustomAuthController::class, 'profile'])->name('profile');
+    Route::put('/profile', [CustomAuthController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/logout', [CustomAuthController::class, 'logout'])->name('logout');
+    
+    // Premium Content (requires subscription)
+    Route::middleware('subscribed')->group(function () {
+        Route::get('/content/premium/{id}', [ContentController::class, 'showPremium'])->name('content.premium');
+    });
+});
 
-// === ROUTES FRONTEND ===
+// Subscription Routes
+Route::middleware(['auth', 'two-factor'])->group(function () {
+    Route::get('/subscription/plans', [SubscriptionController::class, 'plans'])->name('subscription.plans');
+    Route::post('/subscription/subscribe', [SubscriptionController::class, 'subscribe'])->name('subscription.subscribe');
+    Route::get('/subscription/callback', [SubscriptionController::class, 'callback'])->name('subscription.callback');
+    Route::get('/subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
+});
 
-
-
-
-
-
-
-
- Route::resource('contenus', App\Http\Controllers\ContenusController::class);
-
-
-// Commentaires
-Route::resource('commentaires', App\Http\Controllers\CommentairesController::class);
-
-
-// Langues
-Route::resource('langues', App\Http\Controllers\LanguesController::class);
-
-
-// Roles
-Route::resource('roles', App\Http\Controllers\RolesController::class);
-
-Route::resource('utilisateurs', App\Http\Controllers\UtilisateursController::class);
-
-Route::get('/pay', [PaymentController::class, 'pay'])->name('payment.pay');
-Route::get('/callback', [PaymentController::class, 'callback'])->name('payment.callback');
-
-
-
-require __DIR__.'/auth.php';
+// Backend/Admin Routes
+Route::middleware(['auth', 'two-factor', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // Resource routes for all entities
+    Route::resource('users', UserController::class);
+    Route::resource('contenus', ContenuController::class);
+    Route::resource('langues', LangueController::class);
+    Route::resource('media', MediaController::class);
+    Route::resource('regions', RegionController::class);
+    Route::resource('commentaires', CommentaireController::class);
+    Route::resource('roles', RoleController::class);
+    Route::resource('typemedia', TypeMediaController::class);
+    Route::resource('typecontenus', TypeContenuController::class);
+});

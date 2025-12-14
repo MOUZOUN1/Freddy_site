@@ -3,6 +3,9 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use App\Http\Middleware\CheckAdmin;
+use App\Http\Middleware\CheckSubscription;
+use App\Http\Middleware\TwoFactorMiddleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -10,15 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-
-        // Enregistrement du middleware 2FA
+    ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            '2fa' => \App\Http\Middleware\EnsureTwoFactorIsVerified::class,
+            'admin' => CheckAdmin::class,
+            'subscribed' => CheckSubscription::class,
+            'two-factor' => TwoFactorMiddleware::class,
         ]);
-
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
+    ->withExceptions(function (Exceptions $exceptions) {
         //
-    })
-    ->create();
+    })->create();

@@ -2,87 +2,106 @@
 
 namespace App\Models;
 
-use Orchid\Filters\Types\Like;
-use Orchid\Filters\Types\Where;
-use Orchid\Filters\Types\WhereDateStartEnd;
-use Orchid\Platform\Models\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    use HasFactory, Notifiable;
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'is_admin',
+        'is_subscribed',
+        'subscription_ends_at',
+        'subscription_type',
+        'email_verified',
+        'verification_token',
+        'two_factor_code',
+        'two_factor_expires_at',
     ];
 
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password',
         'remember_token',
-        'permissions',
+        'two_factor_code',
+        'verification_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
-        'permissions'          => 'array',
-        'email_verified_at'    => 'datetime',
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+        'is_admin' => 'boolean',
+        'is_subscribed' => 'boolean',
+        'email_verified' => 'boolean',
+        'subscription_ends_at' => 'datetime',
+        'two_factor_expires_at' => 'datetime',
     ];
 
-    /**
-     * The attributes for which you can use filters in url.
-     *
-     * @var array
-     */
-    protected $allowedFilters = [
-           'id'         => Where::class,
-           'name'       => Like::class,
-           'email'      => Like::class,
-           'updated_at' => WhereDateStartEnd::class,
-           'created_at' => WhereDateStartEnd::class,
-    ];
+    // Relations
+    public function contenus()
+    {
+        return $this->hasMany(Contenu::class, 'utilisateur_id');
+    }
 
-    /**
-     * The attributes for which can use sort in url.
-     *
-     * @var array
-     */
-    protected $allowedSorts = [
-        'id',
-        'name',
-        'email',
-        'updated_at',
-        'created_at',
-    ];
+    public function commentaires()
+    {
+        return $this->hasMany(Commentaire::class, 'utilisateur_id');
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function activeSubscription()
+    {
+        return $this->hasOne(Subscription::class)
+                    ->where('status', 'active')
+                    ->where('ends_at', '>', Carbon::now());
+    }
+
+    // Méthodes utiles
+    public function isAdmin()
+    {
+        return $this->is_admin === true;
+    }
+
+    public function hasActiveSubscription()
+    {
+        return $this->is_subscribed && 
+               $this->subscription_ends_at && 
+               $this->subscription_ends_at > Carbon::now();
+    }
+
     public function generateTwoFactorCode()
-{
-    $this->two_factor_code = rand(100000, 999999);
-    $this->two_factor_expires_at = now()->addMinutes(10);
-    $this->save();
+    {
+        $this->two_factor_code = rand(100000, 999999);
+        $this->two_factor_expires_at = Carbon::now()->addMinutes(10);
+        $this->save();
+
+        return $this->two_factor_code;
+    }
+
+    public function resetTwoFactorCode()
+    {
+        $this->two_factor_code = null;
+        $this->two_factor_expires_at = null;
+        $this->save();
+    }
+
+    public function verifyTwoFactorCode($code)
+    {
+        return $this->two_factor_code === $code && 
+               $this->two_factor_expires_at > Carbon::now();
+    }
 }
-
-public function resetTwoFactorCode()
-{
-    $this->two_factor_code = null;
-    $this->two_factor_expires_at = null;
-    $this->save();
-}
-
-}
-
-
-
-
-

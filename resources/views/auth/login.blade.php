@@ -1,88 +1,96 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+@extends('layouts.app')
 
-<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+@section('title', 'Connexion - Culture Bénin')
 
-<div class="bg-white shadow-xl rounded-lg p-10 w-full max-w-md">
+@section('content')
+<div class="max-w-md mx-auto px-4">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <div class="text-center mb-8">
+            <i class="fas fa-user-circle text-6xl text-green-600 mb-4"></i>
+            <h2 class="text-3xl font-bold text-gray-800">Connexion</h2>
+            <p class="text-gray-600 mt-2">Connectez-vous à votre compte</p>
+        </div>
 
-    <!-- Logo -->
-    <div class="flex justify-center mb-6">
-        <img src="{{ asset('images/logo_beninrevele.jpg') }}" class="h-20" alt="Logo">
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+
+            <!-- Email -->
+            <div class="mb-6">
+                <label for="email" class="block text-gray-700 font-medium mb-2">
+                    <i class="fas fa-envelope mr-2"></i>Email
+                </label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    value="{{ old('email') }}"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 @error('email') border-red-500 @enderror"
+                    placeholder="votre@email.com"
+                    required
+                >
+                @error('email')
+                    <p class="text-red-500 text-sm mt-1">
+                        <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+                    </p>
+                @enderror
+            </div>
+
+            <!-- Password -->
+            <div class="mb-6">
+                <label for="password" class="block text-gray-700 font-medium mb-2">
+                    <i class="fas fa-lock mr-2"></i>Mot de passe
+                </label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 @error('password') border-red-500 @enderror"
+                    placeholder="••••••••"
+                    required
+                >
+                @error('password')
+                    <p class="text-red-500 text-sm mt-1">
+                        <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
+                    </p>
+                @enderror
+            </div>
+
+            <!-- Remember Me -->
+            <div class="flex items-center mb-6">
+                <input 
+                    type="checkbox" 
+                    id="remember" 
+                    name="remember" 
+                    class="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                >
+                <label for="remember" class="ml-2 text-gray-700">
+                    Se souvenir de moi
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+                type="submit" 
+                class="w-full bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition duration-300"
+            >
+                <i class="fas fa-sign-in-alt mr-2"></i>Se connecter
+            </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="my-6 text-center text-gray-500">
+            <span>ou</span>
+        </div>
+
+        <!-- Register Link -->
+        <div class="text-center">
+            <p class="text-gray-600">
+                Vous n'avez pas de compte ?
+                <a href="{{ route('register') }}" class="text-green-600 font-medium hover:text-green-700">
+                    Inscrivez-vous
+                </a>
+            </p>
+        </div>
     </div>
-
-    <h2 class="text-2xl font-bold text-center text-[#014E82] mb-6">
-        Connexion
-    </h2>
-
-    @if (session('status'))
-        <div class="bg-green-100 text-green-800 p-2 rounded mb-4 text-center">
-            {{ session('status') }}
-        </div>
-    @endif
-
-    @if ($errors->any())
-        <div class="bg-red-100 text-red-800 p-2 rounded mb-4 text-center">
-            {{ $errors->first() }}
-        </div>
-    @endif
-
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
-
-        <!-- Email -->
-        <div class="mb-4">
-            <label class="block text-gray-700 font-medium mb-2">Email</label>
-            <input type="email" name="email" value="{{ old('email') }}" required
-                   class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-[#014E82] focus:outline-none"
-                   placeholder="email@example.com">
-        </div>
-
-        <!-- Password -->
-        <div class="mb-4">
-            <label class="block text-gray-700 font-medium mb-2">Mot de passe</label>
-            <input type="password" name="password" required
-                   class="w-full px-4 py-2 rounded border border-gray-300 focus:ring-2 focus:ring-[#014E82] focus:outline-none"
-                   placeholder="••••••••">
-        </div>
-
-        <!-- Remember Me -->
-        <div class="flex items-center mb-4">
-            <input type="checkbox" name="remember" class="rounded border-gray-300 text-[#014E82] focus:ring-[#014E82]">
-            <span class="ml-2 text-gray-600 text-sm">Se souvenir de moi</span>
-        </div>
-
-        <!-- Submit -->
-        <button type="submit"
-                class="w-full py-3 bg-[#014E82] hover:bg-[#023d66] text-white rounded-lg font-semibold transition">
-            Se connecter
-        </button>
-
-       <!-- Mot de passe oublié + S'inscrire -->
-@if (Route::has('password.request'))
-<div class="text-center mt-4 flex flex-col gap-2">
-    
-    <a href="{{ route('password.request') }}"
-       class="text-sm text-gray-600 hover:text-[#014E82] underline">
-        Mot de passe oublié ?
-    </a>
-
-    <a href="{{ route('register') }}"
-       class="text-sm text-gray-600 hover:text-[#014E82] underline">
-        S'inscrire
-    </a>
-
 </div>
-@endif
-
-    </form>
-
-</div>
-
-</body>
-</html>
+@endsection

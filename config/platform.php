@@ -186,7 +186,7 @@ return [
 
     'attachment' => [
         'disk'      => env('PLATFORM_FILESYSTEM_DISK', 'public'),
-        'generator' => \Orchid\Attachment\Engines\Generator::class,
+
     ],
 
     /*
@@ -203,7 +203,7 @@ return [
      */
 
     'icons' => [
-        'bs'  => \Orchid\Support\BootstrapIconsPath::getFolder(),
+      
     ],
 
     /*
