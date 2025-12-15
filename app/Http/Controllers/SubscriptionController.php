@@ -86,7 +86,8 @@ class SubscriptionController extends Controller
                 'currency' => 'XOF',
                 'payment_method' => 'fedapay',
                 'status' => 'pending',
-                'fedapay_response' => json_encode($transaction->toArray())
+               'fedapay_response' => json_encode($transaction)
+
             ]);
 
             // Stocker les infos dans la session
