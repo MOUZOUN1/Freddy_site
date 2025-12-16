@@ -1,65 +1,32 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Commentaire;
 use Illuminate\Http\Request;
 
 class CommentaireController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $commentaires = Commentaire::with(['user', 'contenu'])->latest()->get();
+        return view('backend.commentaires.index', compact('commentaires'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function show(Commentaire $commentaire)
     {
-        //
+        return view('backend.commentaires.show', compact('commentaire'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function approve(Commentaire $commentaire)
     {
-        //
+        $commentaire->update(['is_approved' => true]);
+        return redirect()->route('admin.commentaires.index')->with('success', 'Commentaire approuvé.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy(Commentaire $commentaire)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $commentaire->delete();
+        return redirect()->route('admin.commentaires.index')->with('success', 'Commentaire supprimé.');
     }
 }

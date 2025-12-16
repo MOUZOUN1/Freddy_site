@@ -16,13 +16,15 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             // Ajout de tous les seeders listés dans l'image
-            UserSeeder::class,
+           
             RolesSeeder::class,
-            Roles_UserSeeder::class,
+         
               LanguesSeeder::class,
               RegionsSeeder::class,
                TypeContenusSeeder::class,
             TypeMediaSeeder::class,
+             UserSeeder::class,
+              
             ContenusSeeder::class,
             CommentairesSeeder::class,
             MediaSeeder::class,

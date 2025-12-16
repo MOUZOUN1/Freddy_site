@@ -47,7 +47,11 @@ class Kernel extends HttpKernel
      * @var array<string, class-string|string>
      */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
-        'twofactor' => \App\Http\Middleware\TwoFactor::class, // ton middleware 2FA
+         'auth' => \App\Http\Middleware\Authenticate::class,
+         'two-factor' => \App\Http\Middleware\TwoFactorMiddleware::class, 
+         'admin' => \App\Http\Middleware\CheckAdmin::class,
+         'subscribed' => \App\Http\Middleware\CheckSubscription::class,
+         'guest' => \App\Http\Middleware\GuestMiddleware::class,
+
     ];
 }

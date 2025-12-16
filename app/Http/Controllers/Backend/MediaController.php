@@ -1,65 +1,68 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Media;
+use App\Models\TypeMedia;
+use App\Models\Contenu;
 use Illuminate\Http\Request;
 
 class MediaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $medias = Media::with(['typeMedia', 'contenu'])->latest()->get();
+        return view('backend.medias.index', compact('medias'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $types = TypeMedia::all();
+        $contenus = Contenu::all();
+        return view('backend.medias.create', compact('types', 'contenus'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'description' => 'required|string|max:255',
+            'typemedia_id' => 'required|exists:type_media,id',
+            'contenu_id' => 'required|exists:contenus,id',
+        ]);
+
+        Media::create($request->all());
+
+        return redirect()->route('admin.medias.index')->with('success', 'Media créé avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Media $media)
     {
-        //
+        $types = TypeMedia::all();
+        $contenus = Contenu::all();
+        return view('backend.medias.edit', compact('media', 'types', 'contenus'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Media $media)
     {
-        //
+        $request->validate([
+            'description' => 'required|string|max:255',
+            'typemedia_id' => 'required|exists:type_media,id',
+            'contenu_id' => 'required|exists:contenus,id',
+        ]);
+
+        $media->update($request->all());
+
+        return redirect()->route('admin.medias.index')->with('success', 'Media mis à jour avec succès.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function show(Media $media)
     {
-        //
+        return view('backend.medias.show', compact('media'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Media $media)
     {
-        //
+        $media->delete();
+        return redirect()->route('admin.medias.index')->with('success', 'Media supprimé avec succès.');
     }
 }

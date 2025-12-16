@@ -1,65 +1,62 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Langue;
 use Illuminate\Http\Request;
 
 class LangueController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $langues = Langue::latest()->get();
+        return view('backend.langues.index', compact('langues'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('backend.langues.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nomlangue' => 'required|string|max:255',
+            'codelangue' => 'required|string|max:10|unique:langues,codelangue',
+            'description' => 'nullable|string',
+        ]);
+
+        Langue::create($request->all());
+
+        return redirect()->route('admin.langues.index')->with('success', 'Langue créée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Langue $langue)
     {
-        //
+        return view('backend.langues.edit', compact('langue'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Langue $langue)
     {
-        //
+        $request->validate([
+            'nomlangue' => 'required|string|max:255',
+            'codelangue' => 'required|string|max:10|unique:langues,codelangue,' . $langue->id,
+            'description' => 'nullable|string',
+        ]);
+
+        $langue->update($request->all());
+
+        return redirect()->route('admin.langues.index')->with('success', 'Langue mise à jour avec succès.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function show(Langue $langue)
     {
-        //
+        return view('backend.langues.show', compact('langue'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Langue $langue)
     {
-        //
+        $langue->delete();
+        return redirect()->route('admin.langues.index')->with('success', 'Langue supprimée avec succès.');
     }
 }

@@ -3,47 +3,40 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use App\Models\Role;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    public function run(): void
+    public function run()
     {
-        // Créer ou récupérer le rôle "administrateur"
-        $role = Role::firstOrCreate(
-            ['slug' => 'administrateur'],
-            ['name' => 'Administrateur', 'permissions' => json_encode(['*'])]
-        );
-
-        // ---- 1er utilisateur admin existant ----
-        $user1 = User::firstOrCreate(
-            ['email' => 'freddymouzoun@gmai.com'],
+        // Admin par défaut
+        User::updateOrCreate(
+            ['email' => 'freddymouzoun@gmail.com'],
             [
                 'name' => 'Freddy',
                 'password' => Hash::make('Freddymzn27@@'),
-                'permissions' => json_encode([
-                    'platform.index' => true,
-                    'platform.systems.roles' => true,
-                    'platform.systems.users' => true,
-                    'platform.systems.attachment' => true,
-                ]),
+                'is_admin' => true,
+                'is_subscribed' => true,
+                'email_verified_at' => now(),
+                'role_id' => 1,
             ]
         );
-        $user1->roles()->syncWithoutDetaching([$role->id]);
 
-        // ---- 2e utilisateur à ajouter (Maurice) ----
-        $user2 = User::firstOrCreate(
+        // Utilisateur simple
+        User::updateOrCreate(
             ['email' => 'maurice.comlan@uac.bj'],
             [
-                'name' => 'Maurice',
-                'password' => Hash::make('Eneam123'),
-                'permissions' => json_encode([
-                    'platform.index' => true,
-                ]),
+                 'name' => 'Maurice',
+                 'password' => Hash::make('Eneam123'),
+                 'is_admin' => true,
+                 'is_subscribed' => true,
+                 'email_verified_at' => now(),
+                 'role_id' => 1,
             ]
         );
-        $user2->roles()->syncWithoutDetaching([$role->id]);
+
+        // Générer 10 utilisateurs aléatoires
+        User::factory()->count(10)->create();
     }
 }

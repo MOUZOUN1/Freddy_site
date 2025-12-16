@@ -1,65 +1,58 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\TypeMedia;
 use Illuminate\Http\Request;
 
 class TypeMediaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $types = TypeMedia::latest()->get();
+        return view('backend.type_media.index', compact('types'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('backend.type_media.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'libelle' => 'required|string|max:255|unique:type_media,libelle',
+        ]);
+
+        TypeMedia::create($request->all());
+
+        return redirect()->route('admin.type_media.index')->with('success', 'Type de média créé avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(TypeMedia $typeMedia)
     {
-        //
+        return view('backend.type_media.edit', compact('typeMedia'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, TypeMedia $typeMedia)
     {
-        //
+        $request->validate([
+            'libelle' => 'required|string|max:255|unique:type_media,libelle,' . $typeMedia->id,
+        ]);
+
+        $typeMedia->update($request->all());
+
+        return redirect()->route('admin.type_media.index')->with('success', 'Type de média mis à jour avec succès.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function show(TypeMedia $typeMedia)
     {
-        //
+        return view('backend.type_media.show', compact('typeMedia'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(TypeMedia $typeMedia)
     {
-        //
+        $typeMedia->delete();
+        return redirect()->route('admin.type_media.index')->with('success', 'Type de média supprimé avec succès.');
     }
 }

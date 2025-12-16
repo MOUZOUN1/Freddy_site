@@ -23,6 +23,7 @@ class User extends Authenticatable
         'verification_token',
         'two_factor_code',
         'two_factor_expires_at',
+        'role_id',
     ];
 
     protected $hidden = [
@@ -71,10 +72,15 @@ class User extends Authenticatable
     }
 
     // Méthodes utiles
-    public function isAdmin()
-    {
-        return $this->is_admin === true;
-    }
+public function role()
+{
+    return $this->belongsTo(Role::class);
+}
+
+public function isAdmin()
+{
+    return $this->role && $this->role->slug === 'admin';
+}
 
     public function hasActiveSubscription()
     {

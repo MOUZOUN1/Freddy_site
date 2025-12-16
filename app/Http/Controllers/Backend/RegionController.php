@@ -1,65 +1,66 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Region;
 use Illuminate\Http\Request;
 
 class RegionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $regions = Region::latest()->get();
+        return view('backend.regions.index', compact('regions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('backend.regions.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'localisation' => 'nullable|string',
+            'superficie' => 'nullable|numeric',
+            'population' => 'nullable|numeric',
+        ]);
+
+        Region::create($request->all());
+
+        return redirect()->route('admin.regions.index')->with('success', 'Région créée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Region $region)
     {
-        //
+        return view('backend.regions.edit', compact('region'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Region $region)
     {
-        //
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'localisation' => 'nullable|string',
+            'superficie' => 'nullable|numeric',
+            'population' => 'nullable|numeric',
+        ]);
+
+        $region->update($request->all());
+
+        return redirect()->route('admin.regions.index')->with('success', 'Région mise à jour avec succès.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function show(Region $region)
     {
-        //
+        return view('backend.regions.show', compact('region'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Region $region)
     {
-        //
+        $region->delete();
+        return redirect()->route('admin.regions.index')->with('success', 'Région supprimée avec succès.');
     }
 }

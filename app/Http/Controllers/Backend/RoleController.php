@@ -1,65 +1,70 @@
 <?php
 
-namespace App\Http\Controllers\Backend;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $roles = Role::latest()->get();
+        return view('backend.roles.index', compact('roles'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('backend.roles.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'slug' => 'required|string|max:255|unique:roles,slug',
+            'name' => 'required|string|max:255',
+            'permissions' => 'nullable|json',
+        ]);
+
+        Role::create([
+            'slug' => $request->slug,
+            'name' => $request->name,
+            'permissions' => json_decode($request->permissions, true) ?? [],
+        ]);
+
+        return redirect()->route('admin.roles.index')->with('success', 'Rôle créé avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Role $role)
     {
-        //
+        return view('backend.roles.edit', compact('role'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Role $role)
     {
-        //
+        $request->validate([
+            'slug' => 'required|string|max:255|unique:roles,slug,' . $role->id,
+            'name' => 'required|string|max:255',
+            'permissions' => 'nullable|json',
+        ]);
+
+        $role->update([
+            'slug' => $request->slug,
+            'name' => $request->name,
+            'permissions' => json_decode($request->permissions, true) ?? [],
+        ]);
+
+        return redirect()->route('admin.roles.index')->with('success', 'Rôle mis à jour avec succès.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function show(Role $role)
     {
-        //
+        return view('backend.roles.show', compact('role'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Role $role)
     {
-        //
+        $role->delete();
+        return redirect()->route('admin.roles.index')->with('success', 'Rôle supprimé avec succès.');
     }
 }
