@@ -41,6 +41,6 @@ class UserSeeder extends Seeder
         );
 
         // Générer 10 utilisateurs aléatoires via factory
-        User::factory()->count(5)->create();
+       
     }
 }
