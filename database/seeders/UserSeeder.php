@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
         // Admin par défaut
         User::updateOrCreate(
@@ -20,7 +20,8 @@ class UserSeeder extends Seeder
                 'is_subscribed' => true,
                 'email_verified_at' => now(),
                 'role_id' => 1,
-                 'email_verified' => true,
+                'email_verified' => true,
+                'verification_token' => null,
             ]
         );
 
@@ -28,17 +29,18 @@ class UserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'maurice.comlan@uac.bj'],
             [
-                 'name' => 'Maurice',
-                 'password' => Hash::make('Eneam123'),
-                 'is_admin' => true,
-                 'is_subscribed' => true,
-                 'email_verified_at' => now(),
-                 'role_id' => 1,
-                 'email_verified' => true,
+                'name' => 'Maurice',
+                'password' => Hash::make('Eneam123'),
+                'is_admin' => true,
+                'is_subscribed' => true,
+                'email_verified_at' => now(),
+                'role_id' => 1, // rôle utilisateur simple
+                'email_verified' => true,
+                'verification_token' => null,
             ]
         );
 
-        // Générer 10 utilisateurs aléatoires
-        User::factory()->count(2)->create();
+        // Générer 10 utilisateurs aléatoires via factory
+        User::factory()->count(5)->create();
     }
 }
