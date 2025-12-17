@@ -14,8 +14,9 @@
             <thead class="bg-gray-100">
                 <tr>
                     <th class="px-6 py-3">Auteur</th>
-                    <th class="px-6 py-3">Contenu</th>
-                    <th class="px-6 py-3">Message</th>
+                   
+                    <th class="px-6 py-3">Note</th>
+                     <th class="px-6 py-3">Message</th>
                     <th class="px-6 py-3">Statut</th>
                     <th class="px-6 py-3 text-right">Actions</th>
                 </tr>
@@ -26,11 +27,25 @@
                         <td class="px-6 py-4">
                             {{ $commentaire->user->name ?? 'Anonyme' }}
                         </td>
-                        <td class="px-6 py-4">
-                            {{ $commentaire->contenu->titre ?? '-' }}
-                        </td>
+                       <td class="px-6 py-4">
+    @php
+        $note = $commentaire->note ?? 0; // valeur par défaut
+        $max = 5; // nombre d'étoiles maximum
+    @endphp
+
+    <div class="flex space-x-1">
+        @for ($i = 1; $i <= $max; $i++)
+            @if ($i <= $note)
+                <i class="fas fa-star text-yellow-400"></i> {{-- étoile pleine --}}
+            @else
+                <i class="far fa-star text-yellow-400"></i> {{-- étoile vide --}}
+            @endif
+        @endfor
+    </div>
+</td>
+
                         <td class="px-6 py-4 text-gray-700">
-                            {{ Str::limit($commentaire->message, 50) }}
+                           {{ $commentaire->contenu ?? '-' }}
                         </td>
                         <td class="px-6 py-4">
                             @if($commentaire->is_approved)

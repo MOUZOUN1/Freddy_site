@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
                 'is_subscribed' => true,
                 'email_verified_at' => now(),
                 'role_id' => 1,
+                 'email_verified' => true,
             ]
         );
 
@@ -33,10 +34,11 @@ class UserSeeder extends Seeder
                  'is_subscribed' => true,
                  'email_verified_at' => now(),
                  'role_id' => 1,
+                 'email_verified' => true,
             ]
         );
 
         // Générer 10 utilisateurs aléatoires
-        User::factory()->count(10)->create();
+        User::factory()->count(2)->create();
     }
 }

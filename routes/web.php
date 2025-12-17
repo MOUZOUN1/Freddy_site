@@ -64,21 +64,40 @@ Route::middleware(['auth', 'two-factor'])->group(function () {
     Route::get('/subscription/cancel', [SubscriptionController::class, 'cancel'])->name('subscription.cancel');
 });
 
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    // Index des commentaires
+    Route::get('admin/commentaires', [CommentaireController::class, 'index'])
+         ->name('admin.commentaires.index');
+
+    // Vue pour approuver un commentaire
+    Route::put('admin/commentaires/{commentaire}/approve', [CommentaireController::class, 'approveView'])
+         ->name('admin.commentaires.approve');
+
+    // Action POST pour approuver le commentaire
+    Route::post('admin/commentaires/{commentaire}/approve-action', [CommentaireController::class, 'approveAction'])
+         ->name('admin.commentaires.approveAction');
+});
+
 // Backend/Admin routes
 Route::middleware(['auth', 'two-factor', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    // Resource routes
+
     Route::resources([
         'users' => UserController::class,
         'contenus' => ContenuController::class,
         'langues' => LangueController::class,
-        'media' => MediaController::class,
+        'medias' => MediaController::class,
         'regions' => RegionController::class,
         'commentaires' => CommentaireController::class,
         'roles' => RoleController::class,
-        'typemedia' => TypeMediaController::class,
+        'typemedias' => TypeMediaController::class,
         'typecontenus' => TypeContenuController::class,
     ]);
+
+
+
+
 });

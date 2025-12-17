@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('typecontenu_id')->constrained()->onDelete('cascade');
             $table->foreignId('region_id')->constrained()->onDelete('cascade');
             $table->foreignId('langue_id')->constrained()->onDelete('cascade');
-            $table->foreignId('utilisateur_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('contenu_id')->nullable()->constrained('contenus')->onDelete('cascade');
             $table->timestamps();
         });

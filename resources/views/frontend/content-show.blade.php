@@ -24,9 +24,9 @@
                 default => 'benin,heritage'
             };
         @endphp
-        <img src="https://source.unsplash.com/1200x600/?{{ $imageKeywords }}&sig={{ $contenu->id }}" 
-             alt="{{ $contenu->titre }}" 
-             class="w-full h-96 object-cover">
+       <img src="{{ asset('Images/' . $contenu->image) }}" 
+     alt="{{ $contenu->titre }}" 
+     class="w-full h-48 object-cover">
         
         <div class="p-8">
             <!-- Meta Info -->
@@ -56,7 +56,7 @@
                     <i class="fas fa-user text-green-600 text-xl"></i>
                 </div>
                 <div>
-                    <p class="font-medium text-gray-800">{{ $contenu->utilisateur->name }}</p>
+                    <p class="font-medium text-gray-800">{{ $contenu->user->name }}</p>
                     <p class="text-sm text-gray-500">Auteur</p>
                 </div>
             </div>
@@ -203,7 +203,7 @@
                     <div class="flex-1">
                         <div class="flex items-center justify-between mb-2">
                             <div>
-                                <p class="font-medium text-gray-800">{{ $commentaire->utilisateur->name }}</p>
+                                <p class="font-medium text-gray-800">{{ $commentaire->user->name }}</p>
                                 <p class="text-sm text-gray-500">{{ $commentaire->created_at->diffForHumans() }}</p>
                             </div>
                             <div class="flex">
@@ -245,9 +245,9 @@
                         default => 'benin,heritage'
                     };
                 @endphp
-                <img src="https://source.unsplash.com/600x400/?{{ $simImageKeywords }}&sig={{ $similaire->id }}" 
-                     alt="{{ $similaire->titre }}" 
-                     class="w-full h-40 object-cover">
+      <img src="{{ asset('Images/' . $contenu->image) }}" 
+     alt="{{ $contenu->titre }}" 
+     class="w-full h-48 object-cover">
                 
                 <div class="p-4">
                     <h3 class="font-bold text-gray-800 mb-2">{{ $similaire->titre }}</h3>

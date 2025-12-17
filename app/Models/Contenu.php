@@ -14,7 +14,7 @@ class Contenu extends Model
 
     // ou 'typecontenu' selon ton schéma
 
-    protected $fillable = ['titre', 'texte', 'statut', 'typecontenu_id', 'region_id', 'langue_id', 'utilisateur_id', 'contenu_id'];
+    protected $fillable = ['titre', 'texte', 'statut', 'typecontenu_id', 'region_id','image', 'langue_id', 'user_id', 'contenu_id'];
 
     public function typecontenu(): BelongsTo
     {
@@ -31,9 +31,9 @@ class Contenu extends Model
         return $this->belongsTo(Langue::class);
     }
 
-    public function utilisateur(): BelongsTo
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\User::class, 'utilisateur_id');
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
     }
 
     public function commentaires(): HasMany

@@ -22,7 +22,7 @@ class UserController extends Controller
             });
         }
 
-        $users = $query->latest()->paginate(10);
+        $users = $query->latest()->paginate(5);
 
         return view('backend.users.index', compact('users'));
     }

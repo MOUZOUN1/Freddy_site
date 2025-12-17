@@ -79,7 +79,7 @@ public function role()
 
 public function isAdmin()
 {
-    return $this->role && $this->role->slug === 'admin';
+    return $this->role && $this->role->slug === 'administrateur';
 }
 
     public function hasActiveSubscription()

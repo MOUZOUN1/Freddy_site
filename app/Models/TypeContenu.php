@@ -10,8 +10,10 @@ class TypeContenu extends Model
      protected $table = 'typecontenus';
     protected $fillable = ['libelle'];
 
+  
+
     public function contenus(): HasMany
-    {
-        return $this->hasMany(Contenu::class);
-    }
+{
+    return $this->hasMany(Contenu::class, 'typecontenu_id');
+}
 }

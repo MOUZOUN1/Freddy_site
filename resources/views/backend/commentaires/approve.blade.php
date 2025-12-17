@@ -24,9 +24,8 @@
             </a>
 
             <form method="POST"
-                  action="{{ route('admin.commentaires.approve', $commentaire) }}">
+                  action="{{ route('admin.commentaires.approveAction', $commentaire->id) }}">
                 @csrf
-                @method('PUT')
                 <button class="bg-green-600 text-white px-4 py-2 rounded">
                     Approuver
                 </button>
@@ -35,4 +34,3 @@
     </div>
 </div>
 @endsection
-

@@ -14,7 +14,7 @@ class ContentController extends Controller
      */
     public function show($id)
     {
-        $contenu = Contenu::with(['typecontenu', 'region', 'langue', 'utilisateur', 'media'])
+        $contenu = Contenu::with(['typecontenu', 'region', 'langue', 'user', 'media'])
                          ->findOrFail($id);
 
         // Vérifier si le contenu est publié
@@ -24,7 +24,7 @@ class ContentController extends Controller
 
         // Récupérer les commentaires
         $commentaires = Commentaire::where('contenu_id', $id)
-                                   ->with('utilisateur')
+                                   ->with('user')
                                    ->latest()
                                    ->take(5)
                                    ->get();
@@ -67,7 +67,7 @@ class ContentController extends Controller
         // Ce middleware est déjà appliqué dans les routes
         // L'utilisateur est forcément connecté ET abonné pour arriver ici
 
-        $contenu = Contenu::with(['typecontenu', 'region', 'langue', 'utilisateur', 'media'])
+        $contenu = Contenu::with(['typecontenu', 'region', 'langue', 'user', 'media'])
                          ->findOrFail($id);
 
         if ($contenu->statut !== 'Publié') {
@@ -76,7 +76,7 @@ class ContentController extends Controller
 
         // Récupérer tous les commentaires
         $commentaires = Commentaire::where('contenu_id', $id)
-                                   ->with('utilisateur')
+                                   ->with('user')
                                    ->latest()
                                    ->paginate(10);
 
@@ -115,7 +115,7 @@ class ContentController extends Controller
         Commentaire::create([
             'contenu' => $validated['contenu'],
             'note' => $validated['note'],
-            'utilisateur_id' => auth()->id(),
+            'user_id' => auth()->id(),
             'contenu_id' => $id,
         ]);
 

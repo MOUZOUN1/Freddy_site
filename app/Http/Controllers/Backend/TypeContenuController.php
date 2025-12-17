@@ -38,16 +38,18 @@ class TypeContenuController extends Controller
                         ->with('success', 'Type de contenu créé avec succès.');
     }
 
-    public function show(TypeContenu $typecontenu)
-    {
-        $typecontenu->load('contenus');
-        return view('backend.typecontenus.show', compact('typecontenu'));
-    }
+public function show(TypeContenu $typecontenu)
+{
+    return view('backend.typecontenus.show', compact('typecontenu'));
+}
 
-    public function edit(TypeContenu $typecontenu)
-    {
-        return view('backend.typecontenus.edit', compact('typecontenu'));
-    }
+
+
+   public function edit(TypeContenu $typecontenu)
+{
+    return view('backend.typecontenus.edit',compact('typecontenu'));
+    
+}
 
     public function update(Request $request, TypeContenu $typecontenu)
     {

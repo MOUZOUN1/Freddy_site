@@ -11,11 +11,11 @@
         </h1>
 
         <div class="flex space-x-2">
-            <a href="{{ route('admin.type_contenus.edit', $typeContenu) }}"
+            <a href="{{ route('admin.typecontenus.edit', $typecontenu) }}"
                class="bg-blue-600 text-white px-4 py-2 rounded-lg">
                 <i class="fas fa-edit mr-2"></i>Modifier
             </a>
-            <a href="{{ route('admin.type_contenus.index') }}"
+            <a href="{{ route('admin.typecontenus.index') }}"
                class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg">
                 <i class="fas fa-arrow-left mr-2"></i>Retour
             </a>
@@ -26,7 +26,7 @@
         <div class="grid grid-cols-1 gap-6 mb-6">
             <div>
                 <p class="text-gray-600 mb-1">Libellé</p>
-                <p class="font-medium text-gray-800">{{ $typeContenu->libelle }}</p>
+                <p class="font-medium text-gray-800">{{ $typecontenu->libelle }}</p>
             </div>
         </div>
     </div>

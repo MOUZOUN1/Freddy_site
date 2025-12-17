@@ -36,13 +36,7 @@
                 </p>
             </div>
 
-            <div>
-                <p class="text-gray-600 mb-1">Statut</p>
-                <span class="px-3 py-1 rounded-full text-sm
-                    {{ $media->statut === 'actif' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                    {{ ucfirst($media->statut) }}
-                </span>
-            </div>
+           
 
             <div>
                 <p class="text-gray-600 mb-1">Contenu associé</p>

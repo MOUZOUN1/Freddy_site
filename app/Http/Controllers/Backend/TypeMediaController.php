@@ -1,7 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Backend;
+use App\Http\Controllers\Controller;
 use App\Models\TypeMedia;
 use Illuminate\Http\Request;
 
@@ -9,14 +9,16 @@ class TypeMediaController extends Controller
 {
     public function index()
     {
-        $types = TypeMedia::latest()->get();
-        return view('backend.type_media.index', compact('types'));
+        $types = TypeMedia::latest()->paginate(10);;
+        return view('backend.typemedias.index', compact('types'));
     }
 
     public function create()
     {
-        return view('backend.type_media.create');
+        return view('backend.typemedias.create');
     }
+
+    
 
     public function store(Request $request)
     {
@@ -29,30 +31,31 @@ class TypeMediaController extends Controller
         return redirect()->route('admin.type_media.index')->with('success', 'Type de média créé avec succès.');
     }
 
-    public function edit(TypeMedia $typeMedia)
-    {
-        return view('backend.type_media.edit', compact('typeMedia'));
-    }
+  public function edit(TypeMedia $typemedia)
+{
+    return view('backend.typemedias.edit', compact('typemedia'));
+}
 
-    public function update(Request $request, TypeMedia $typeMedia)
+
+    public function update(Request $request, TypeMedia $typemedia)
     {
         $request->validate([
-            'libelle' => 'required|string|max:255|unique:type_media,libelle,' . $typeMedia->id,
+            'libelle' => 'required|string|max:255|unique:type_media,libelle,' . $typemedia->id,
         ]);
 
-        $typeMedia->update($request->all());
+        $typemedia->update($request->all());
 
-        return redirect()->route('admin.type_media.index')->with('success', 'Type de média mis à jour avec succès.');
+        return redirect()->route('admin.typemedias.index')->with('success', 'Type de média mis à jour avec succès.');
     }
 
-    public function show(TypeMedia $typeMedia)
+    public function show(TypeMedia $typemedia)
     {
-        return view('backend.type_media.show', compact('typeMedia'));
+        return view('backend.typemedias.show', compact('typemedia'));
     }
 
     public function destroy(TypeMedia $typeMedia)
     {
         $typeMedia->delete();
-        return redirect()->route('admin.type_media.index')->with('success', 'Type de média supprimé avec succès.');
+        return redirect()->route('admin.typemedias.index')->with('success', 'Type de média supprimé avec succès.');
     }
 }

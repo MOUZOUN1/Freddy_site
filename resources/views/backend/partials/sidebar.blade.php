@@ -42,8 +42,8 @@
 
             <!-- Media -->
             <li>
-                <a href="{{ route('admin.media.index') }}" 
-                   class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.media.*') ? 'bg-gray-700' : '' }}">
+                <a href="{{ route('admin.medias.index') }}" 
+                   class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.medias.*') ? 'bg-gray-700' : '' }}">
                     <i class="fas fa-photo-video w-5"></i>
                     <span>Médias</span>
                 </a>
@@ -96,7 +96,7 @@
 
             <!-- Type Media -->
             <li>
-                <a href="{{ route('admin.typemedia.index') }}" 
+                <a href="{{ route('admin.typemedias.index') }}" 
                    class="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.typemedia.*') ? 'bg-gray-700' : '' }}">
                     <i class="fas fa-icons w-5"></i>
                     <span>Types Médias</span>

@@ -13,7 +13,7 @@ class ContenuController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Contenu::with(['typecontenu', 'region', 'langue', 'utilisateur']);
+        $query = Contenu::with(['typecontenu', 'region', 'langue', 'user']);
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
@@ -46,7 +46,7 @@ class ContenuController extends Controller
             'langue_id' => 'required|exists:langues,id',
         ]);
 
-        $validated['utilisateur_id'] = auth()->id();
+        $validated['user_id'] = auth()->id();
 
         Contenu::create($validated);
 
@@ -56,7 +56,7 @@ class ContenuController extends Controller
 
     public function show(Contenu $contenu)
     {
-        $contenu->load(['typecontenu', 'region', 'langue', 'utilisateur', 'media', 'commentaires']);
+        $contenu->load(['typecontenu', 'region', 'langue', 'user', 'media', 'commentaires']);
         return view('backend.contenus.show', compact('contenu'));
     }
 

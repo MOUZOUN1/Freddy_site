@@ -37,7 +37,7 @@
                     <select name="typemedia_id"
                             class="w-full px-4 py-2 border rounded-lg @error('typemedia_id') border-red-500 @enderror">
                         <option value="">-- Sélectionner --</option>
-                        @foreach($typesMedias as $type)
+                        @foreach($types as $type)
                             <option value="{{ $type->id }}"
                                 {{ old('typemedia_id') == $type->id ? 'selected' : '' }}>
                                 {{ $type->libelle }}

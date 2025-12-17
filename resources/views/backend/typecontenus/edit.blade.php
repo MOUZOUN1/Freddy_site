@@ -1,31 +1,33 @@
 @extends('backend.layouts.admin')
 
-@section('title', 'Créer un Type de Média')
+@section('title', 'Modifier le Type de Contenu')
 
 @section('content')
 <div class="p-6">
     <h1 class="text-3xl font-bold text-gray-800 mb-6">
-        <i class="fas fa-photo-video mr-2 text-green-600"></i>
-        Créer un Type de Média
+        <i class="fas fa-file-alt mr-2 text-blue-600"></i>
+        Modifier le Type de Contenu
     </h1>
 
     <div class="bg-white rounded-lg shadow-md p-8">
-        <form method="POST" action="{{ route('admin.type_media.store') }}">
+        <form method="POST" action="{{ route('admin.typecontenus.update', $typecontenu) }}">
             @csrf
+            @method('PUT')
 
             <div class="mb-6">
                 <label class="block text-gray-700 font-medium mb-2">Libellé</label>
-                <input type="text" name="libelle" value="{{ old('libelle') }}"
+                <input type="text" name="libelle"
+                       value="{{ old('libelle', $typecontenu->libelle) }}"
                        class="w-full px-4 py-2 border rounded-lg @error('libelle') border-red-500 @enderror"
-                       placeholder="Image, Vidéo, Audio..." required>
+                       required>
                 @error('libelle')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
             </div>
 
             <div class="flex justify-end space-x-4">
-                <a href="{{ route('admin.type_media.index') }}"
+                <a href="{{ route('admin.typecontenus.index') }}"
                    class="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg">Annuler</a>
-                <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg">
-                    <i class="fas fa-save mr-2"></i>Enregistrer
+                <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg">
+                    <i class="fas fa-save mr-2"></i>Mettre à jour
                 </button>
             </div>
         </form>

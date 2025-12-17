@@ -33,10 +33,22 @@
             </div>
 
             <div>
-                <p class="text-gray-600 mb-1">Contenu</p>
-                <p class="font-medium text-gray-800">
-                    {{ $commentaire->contenu->titre ?? '-' }}
-                </p>
+                <p class="text-gray-600 mb-1">  Note</p>
+             <p class="flex space-x-1">
+    @php
+        $note = $commentaire->note ?? 0; // valeur par défaut si la note est null
+        $max = 5; // nombre maximum d'étoiles
+    @endphp
+
+    @for ($i = 1; $i <= $max; $i++)
+        @if ($i <= $note)
+            <i class="fas fa-star text-yellow-400"></i> {{-- étoile pleine --}}
+        @else
+            <i class="far fa-star text-yellow-400"></i> {{-- étoile vide --}}
+        @endif
+    @endfor
+</p>
+
             </div>
 
             <div>
@@ -56,7 +68,8 @@
         <div class="mb-6">
             <p class="text-gray-600 mb-2">Message</p>
             <div class="bg-gray-50 p-4 rounded-lg text-gray-800">
-                {{ $commentaire->message }}
+              
+                 {{ $commentaire->contenu ?? '-' }}
             </div>
         </div>
 

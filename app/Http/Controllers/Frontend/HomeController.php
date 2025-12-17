@@ -15,7 +15,7 @@ class HomeController extends Controller
     {
         // Récupérer tous les contenus publiés
         $query = Contenu::where('statut', 'Publié')
-                        ->with(['typecontenu', 'region', 'langue', 'utilisateur']);
+                        ->with(['typecontenu', 'region', 'langue', 'user']);
 
         // Filtrer par type si présent
         if ($request->has('type') && $request->type != '') {

@@ -58,9 +58,13 @@
                         default => 'benin,culture'
                     };
                 @endphp
-                <img src="https://source.unsplash.com/800x600/?{{ $imageKeywords }}" 
-                     alt="{{ $contenu->titre }}" 
-                     class="w-full h-48 object-cover">
+       <img src="{{ asset('Images/' . $contenu->image) }}" 
+     alt="{{ $contenu->titre }}" 
+     class="w-full h-48 object-cover">
+
+
+
+                   
                 
                 <div class="p-6">
                     <div class="flex items-center justify-between mb-3">
@@ -162,9 +166,11 @@
                         default => 'benin,heritage'
                     };
                 @endphp
-                <img src="https://source.unsplash.com/600x400/?{{ $imageKeywords }}&sig={{ $contenu->id }}" 
-                     alt="{{ $contenu->titre }}" 
-                     class="w-full h-48 object-cover">
+                
+        <img src="{{ asset('Images/' . $contenu->image) }}" 
+     alt="{{ $contenu->titre }}" 
+     class="w-full h-48 object-cover">
+
                 
                 <div class="p-5">
                     <div class="flex items-center justify-between mb-3">

@@ -46,7 +46,7 @@
                     <select name="typecontenu_id"
                             class="w-full px-4 py-2 border rounded-lg @error('typecontenu_id') border-red-500 @enderror">
                         <option value="">-- Sélectionner --</option>
-                        @foreach($typesContenus as $type)
+                        @foreach($types as $type)
                             <option value="{{ $type->id }}"
                                 {{ old('typecontenu_id') == $type->id ? 'selected' : '' }}>
                                 {{ $type->libelle }}
